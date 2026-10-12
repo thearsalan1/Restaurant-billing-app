@@ -25,6 +25,7 @@ const menuItemSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    isAvailable: { type: Boolean, default: true },
   },
   { timestamps: true },
 );

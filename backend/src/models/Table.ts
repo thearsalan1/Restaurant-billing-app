@@ -3,7 +3,7 @@ import { model, Schema } from "mongoose";
 const tableSchema = new Schema(
   {
     number: {
-      type: String,
+      type: Number,
       required: true,
       unique: true,
       min: 1,
