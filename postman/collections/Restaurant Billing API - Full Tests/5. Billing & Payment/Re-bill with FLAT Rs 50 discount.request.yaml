@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders/{{orderId}}/bill"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "discountType": "FLAT",
+      "discountValue": 5000
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const o = pm.response.json().data;
+      pm.test("discountType FLAT", () => pm.expect(o.discountType).to.eql("FLAT"));
+      pm.test("discountAmount 5000", () => pm.expect(o.discountAmount).to.eql(5000));
+      pm.test("tax 5% of 54000 = 2700", () => pm.expect(o.taxAmount).to.eql(2700));
+      pm.test("total 56700 (Rs 567.00)", () => pm.expect(o.total).to.eql(56700));
+    language: text/javascript
+order: 15000

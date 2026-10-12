@@ -1,0 +1,23 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders/{{orderId}}/items"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "menuItemId": "{{chickenId}}",
+      "quantity": 1
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201", () => pm.response.to.have.status(201));
+      const o = pm.response.json().data;
+      const c = o.items.find(i => i.name === "Butter Chicken");
+      pm.test("2 rows", () => pm.expect(o.items.length).to.eql(2));
+      pm.test("Price snapshot is 34000 paise", () => pm.expect(c.unitPrice).to.eql(34000));
+      pm.collectionVariables.set("chickenRowId", c._id);
+    language: text/javascript
+order: 8000

@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tableId": "{{tableId}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201", () => pm.response.to.have.status(201));
+      const o = pm.response.json().data;
+      pm.test("Status OPEN, no items", () => { pm.expect(o.status).to.eql("OPEN"); pm.expect(o.items.length).to.eql(0); });
+      pm.test("Has order number", () => pm.expect(o.orderNumber).to.be.a("number"));
+      pm.collectionVariables.set("orderId", o._id);
+    language: text/javascript
+order: 1000

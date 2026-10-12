@@ -1,0 +1,21 @@
+$kind: collection
+description: Run `npm run seed` first, then run this collection top to bottom with the Collection Runner. Assumes TAX_RATE=5.
+variables:
+  baseUrl: http://localhost:5000
+  fakeId: 64b000000000000000000000
+  startersId: ""
+  newCategoryId: ""
+  naanId: ""
+  chickenId: ""
+  chaiId: ""
+  iceCreamId: ""
+  newMenuItemId: ""
+  tableId: ""
+  table2Id: ""
+  newTableId: ""
+  orderId: ""
+  orderId2: ""
+  orderId3: ""
+  naanRowId: ""
+  chickenRowId: ""
+  chaiRowId: ""

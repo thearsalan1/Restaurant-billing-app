@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/api/tables/{{newTableId}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "capacity": 8
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      pm.test("Capacity updated", () => pm.expect(pm.response.json().data.capacity).to.eql(8));
+    language: text/javascript
+order: 7000

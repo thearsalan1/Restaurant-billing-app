@@ -1,0 +1,12 @@
+$kind: http-request
+url: "{{baseUrl}}/api/tables"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const t = pm.response.json().data.find(x => x._id === pm.collectionVariables.get("tableId"));
+      pm.test("Table is OCCUPIED", () => pm.expect(t.status).to.eql("OCCUPIED"));
+      pm.test("currentOrder matches", () => pm.expect(t.currentOrder._id).to.eql(pm.collectionVariables.get("orderId")));
+    language: text/javascript
+order: 5000

@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/tables"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "number": 9,
+      "capacity": 6
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("newTableId", pm.response.json().data._id);
+    language: text/javascript
+order: 2000

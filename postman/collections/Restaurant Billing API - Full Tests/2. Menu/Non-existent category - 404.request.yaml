@@ -1,0 +1,21 @@
+$kind: http-request
+name: Non-existent category -> 404
+url: "{{baseUrl}}/api/menu"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Ghost",
+      "category": "{{fakeId}}",
+      "price": 1000
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 404", () => pm.response.to.have.status(404));
+      pm.test("success is false", () => pm.expect(pm.response.json().success).to.eql(false));
+    language: text/javascript
+order: 11000

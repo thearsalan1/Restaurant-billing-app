@@ -1,0 +1,14 @@
+$kind: http-request
+name: "Filter: available=false (only Ice Cream)"
+url: "{{baseUrl}}/api/menu?available=false"
+method: GET
+queryParams:
+  available: "false"
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const d = pm.response.json().data;
+      pm.test("Only Ice Cream", () => { pm.expect(d.length).to.eql(1); pm.expect(d[0].name).to.eql("Ice Cream"); });
+    language: text/javascript
+order: 3000

@@ -1,0 +1,10 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders/{{orderId}}/items/{{chaiRowId}}"
+method: DELETE
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      pm.test("Back to 2 rows", () => pm.expect(pm.response.json().data.items.length).to.eql(2));
+    language: text/javascript
+order: 18000

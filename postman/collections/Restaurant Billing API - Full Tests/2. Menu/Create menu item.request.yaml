@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/menu"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Palak Paneer",
+      "category": "{{newCategoryId}}",
+      "price": 26000
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201", () => pm.response.to.have.status(201));
+      pm.test("Category populated", () => pm.expect(pm.response.json().data.category.name).to.be.a("string"));
+      pm.collectionVariables.set("newMenuItemId", pm.response.json().data._id);
+    language: text/javascript
+order: 7000

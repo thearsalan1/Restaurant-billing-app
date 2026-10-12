@@ -1,0 +1,19 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders/{{orderId}}/items/{{naanRowId}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "quantity": 5
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const n = pm.response.json().data.items.find(i => i.name === "Butter Naan");
+      pm.test("Qty is 5", () => pm.expect(n.quantity).to.eql(5));
+    language: text/javascript
+order: 14000

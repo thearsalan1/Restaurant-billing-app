@@ -1,0 +1,21 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders/{{orderId}}/pay"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "paymentMethod": "UPI"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const o = pm.response.json().data;
+      pm.test("PAID", () => pm.expect(o.status).to.eql("PAID"));
+      pm.test("Method UPI", () => pm.expect(o.paymentMethod).to.eql("UPI"));
+      pm.test("paidAt set", () => pm.expect(o.paidAt).to.exist);
+    language: text/javascript
+order: 17000

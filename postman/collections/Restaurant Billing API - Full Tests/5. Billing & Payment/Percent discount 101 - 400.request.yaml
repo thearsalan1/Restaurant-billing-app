@@ -1,0 +1,20 @@
+$kind: http-request
+name: Percent discount 101 -> 400
+url: "{{baseUrl}}/api/orders/{{orderId}}/bill/preview"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "discountType": "PERCENT",
+      "discountValue": 101
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 400", () => pm.response.to.have.status(400));
+      pm.test("success is false", () => pm.expect(pm.response.json().success).to.eql(false));
+    language: text/javascript
+order: 4000

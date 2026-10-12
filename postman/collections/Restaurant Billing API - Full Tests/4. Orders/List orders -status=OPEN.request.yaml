@@ -1,0 +1,15 @@
+$kind: http-request
+name: List orders ?status=OPEN
+url: "{{baseUrl}}/api/orders?status=OPEN"
+method: GET
+queryParams:
+  status: OPEN
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const d = pm.response.json().data;
+      pm.test("All are OPEN", () => pm.expect(d.every(o => o.status === "OPEN")).to.be.true);
+      pm.test("Includes our order", () => pm.expect(d.some(o => o._id === pm.collectionVariables.get("orderId"))).to.be.true);
+    language: text/javascript
+order: 21000

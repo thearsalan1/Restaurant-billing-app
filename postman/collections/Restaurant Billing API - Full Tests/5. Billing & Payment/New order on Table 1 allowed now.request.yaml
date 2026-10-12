@@ -1,0 +1,18 @@
+$kind: http-request
+url: "{{baseUrl}}/api/orders"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "tableId": "{{tableId}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 201", () => pm.response.to.have.status(201));
+      pm.collectionVariables.set("orderId3", pm.response.json().data._id);
+    language: text/javascript
+order: 22000

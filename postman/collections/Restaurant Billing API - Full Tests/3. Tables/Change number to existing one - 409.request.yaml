@@ -1,0 +1,19 @@
+$kind: http-request
+name: Change number to existing one -> 409
+url: "{{baseUrl}}/api/tables/{{newTableId}}"
+method: PATCH
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "number": 1
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 409", () => pm.response.to.have.status(409));
+      pm.test("success is false", () => pm.expect(pm.response.json().success).to.eql(false));
+    language: text/javascript
+order: 9000

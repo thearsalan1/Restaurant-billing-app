@@ -1,0 +1,26 @@
+$kind: http-request
+name: "Preview: 10% discount"
+description: Assumes TAX_RATE=5 in .env
+url: "{{baseUrl}}/api/orders/{{orderId}}/bill/preview"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "discountType": "PERCENT",
+      "discountValue": 10
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const b = pm.response.json().data;
+      pm.test("subtotal 59000", () => pm.expect(b.subtotal).to.eql(59000));
+      pm.test("discount 5900", () => pm.expect(b.discountAmount).to.eql(5900));
+      pm.test("taxable 53100", () => pm.expect(b.taxableAmount).to.eql(53100));
+      pm.test("GST 5% = 2655", () => pm.expect(b.taxAmount).to.eql(2655));
+      pm.test("total 55755 (Rs 557.55)", () => pm.expect(b.total).to.eql(55755));
+    language: text/javascript
+order: 7000

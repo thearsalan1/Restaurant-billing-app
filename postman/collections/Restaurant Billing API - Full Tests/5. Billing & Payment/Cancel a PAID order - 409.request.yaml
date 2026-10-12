@@ -1,0 +1,11 @@
+$kind: http-request
+name: Cancel a PAID order -> 409
+url: "{{baseUrl}}/api/orders/{{orderId}}/cancel"
+method: POST
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 409", () => pm.response.to.have.status(409));
+      pm.test("success is false", () => pm.expect(pm.response.json().success).to.eql(false));
+    language: text/javascript
+order: 19000

@@ -1,0 +1,15 @@
+$kind: http-request
+name: "Search: chicken"
+url: "{{baseUrl}}/api/menu?search=chicken"
+method: GET
+queryParams:
+  search: chicken
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      const d = pm.response.json().data;
+      pm.test("Has results", () => pm.expect(d.length).to.be.above(0));
+      pm.test("All names contain chicken", () => pm.expect(d.every(i => /chicken/i.test(i.name))).to.be.true);
+    language: text/javascript
+order: 4000

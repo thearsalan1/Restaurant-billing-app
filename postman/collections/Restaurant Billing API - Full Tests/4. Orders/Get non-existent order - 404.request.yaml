@@ -1,0 +1,11 @@
+$kind: http-request
+name: Get non-existent order -> 404
+url: "{{baseUrl}}/api/orders/{{fakeId}}"
+method: GET
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status is 404", () => pm.response.to.have.status(404));
+      pm.test("success is false", () => pm.expect(pm.response.json().success).to.eql(false));
+    language: text/javascript
+order: 23000
